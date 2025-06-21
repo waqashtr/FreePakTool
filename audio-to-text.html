@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio to Text Converter - Free Pak Tools</title>
+    <meta name="description" content="Convert your audio files to text quickly and accurately with our free online audio to text converter. Supports MP3, WAV, and other common formats.">
+    <style>
+        /* === تمام CSS بالکل ویسا ہی رہے گا === */
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        /* ... باقی تمام CSS بالکل ویسا ہی ... */
+    </style>
+</head>
+<body>
+    <!-- === تمام HTML بالکل ویسا ہی === -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">Free <span>Pak</span> Tools</a>
+            <a href="index.html" class="back-btn">← Back to Tools</a>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- AdMob اشتہار (بالکل ویسا ہی) -->
+        <div class="ad-container">
+            <div id="top-ad">
+                <script>console.log("AdMob Top Ad: ca-app-pub-8894441711880316/1007674305");</script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+        
+        <!-- ... باقی تمام HTML ویسا ہی ... -->
+        
+        <!-- How to Use Section -->
+        <section class="how-to-use">
+            <h2>How to Use the Audio to Text Converter</h2>
+            <!-- ... ویسا ہی ... -->
+        </section>
+        
+        <!-- Bottom AdMob اشتہار -->
+        <div class="ad-container">
+            <div id="bottom-ad">
+                <script>console.log("AdMob Bottom Ad: ca-app-pub-8894441711880316/7381510965");</script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <!-- ... ویسا ہی ... -->
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // === تمام متغیرات ویسے ہی ===
+            const uploadArea = document.getElementById('uploadArea');
+            const audioFileInput = document.getElementById('audioFile');
+            const browseBtn = document.getElementById('browseBtn');
+            const convertBtn = document.getElementById('convertBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resultSection = document.getElementById('resultSection');
+            const resultText = document.getElementById('resultText');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const languageSelect = document.getElementById('languageSelect');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            let audioFile = null;
+            let audioContext = null;
+            let audioBuffer = null;
+            let audioSource = null;
+            let recognition = null;
+            
+            // === فکس #1: Web Speech API سپورٹ چیک ===
+            function isSpeechRecognitionSupported() {
+                return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+            }
+            
+            if (!isSpeechRecognitionSupported()) {
+                showStatus('Your browser does not support speech recognition. Please use Chrome or Edge.', 'error');
+                convertBtn.disabled = true;
+                convertBtn.classList.add('btn-disabled');
+            }
+            
+            // === باقی تمام ایونٹ لسٹنرز ویسے ہی ===
+            browseBtn.addEventListener('click', function() { audioFileInput.click(); });
+            
+            audioFileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) handleFileSelection(e.target.files[0]);
+            });
+            
+            // === فائل سلیکشن ===
+            function handleFileSelection(file) {
+                if (!file.type.match('audio.*')) {
+                    showStatus('Please select an audio file (MP3, WAV, etc.)', 'error');
+                    return;
+                }
+                
+                audioFile = file;
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'block';
+                convertBtn.disabled = false;
+                convertBtn.classList.remove('btn-disabled');
+                showStatus('File ready for conversion. Select language and click "Convert to Text".', 'success');
+            }
+            
+            // === فکس #2: Convert بٹن کا نیا منطق ===
+            convertBtn.addEventListener('click', function() {
+                if (!audioFile) return;
+                
+                loadingIndicator.style.display = 'block';
+                convertBtn.disabled = true;
+                convertBtn.classList.add('btn-disabled');
+                resultText.textContent = '';
+                
+                const language = languageSelect.value;
+                
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const fileReader = new FileReader();
+                
+                fileReader.onload = function(e) {
+                    audioContext.decodeAudioData(e.target.result)
+                        .then(function(buffer) {
+                            audioBuffer = buffer;
+                            startRecognition(language);
+                        })
+                        .catch(function(error) {
+                            loadingIndicator.style.display = 'none';
+                            showStatus('Error processing audio file: ' + error.message, 'error');
+                            resetConvertButton();
+                        });
+                };
+                
+                fileReader.onerror = function() {
+                    loadingIndicator.style.display = 'none';
+                    showStatus('Error reading audio file', 'error');
+                    resetConvertButton();
+                };
+                
+                fileReader.readAsArrayBuffer(audioFile);
+            });
+            
+            // === فکس #3: Recognition کا محفوظ طریقہ ===
+            function startRecognition(language) {
+                try {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        throw new Error('Speech recognition not supported');
+                    }
+                    
+                    recognition = new SpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = false;
+                    recognition.lang = language;
+                    
+                    recognition.onresult = function(event) {
+                        let finalTranscript = '';
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            if (event.results[i].isFinal) {
+                                finalTranscript += event.results[i][0].transcript + ' ';
+                            }
+                        }
+                        resultText.textContent += finalTranscript;
+                    };
+                    
+                    recognition.onerror = function(event) {
+                        loadingIndicator.style.display = 'none';
+                        showStatus('Recognition error: ' + event.error, 'error');
+                        resetConvertButton();
+                    };
+                    
+                    recognition.onend = function() {
+                        loadingIndicator.style.display = 'none';
+                        resultSection.style.display = 'block';
+                        showStatus('Conversion complete!', 'success');
+                    };
+                    
+                    audioSource = audioContext.createBufferSource();
+                    audioSource.buffer = audioBuffer;
+                    audioSource.connect(audioContext.destination);
+                    
+                    recognition.start();
+                    setTimeout(() => audioSource.start(0), 300);
+                    
+                } catch (error) {
+                    loadingIndicator.style.display = 'none';
+                    showStatus('Error: ' + error.message, 'error');
+                    resetConvertButton();
+                }
+            }
+            
+            // === ہیلپر فنکشنز ===
+            function resetConvertButton() {
+                convertBtn.disabled = false;
+                convertBtn.classList.remove('btn-disabled');
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message';
+                statusMessage.classList.add(`status-${type}`);
+                statusMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // === Reset, Copy, Download بٹنز ===
+            resetBtn.addEventListener('click', function() {
+                if (recognition) recognition.stop();
+                if (audioSource) audioSource.stop();
+                audioFile = null;
+                audioBuffer = null;
+                recognition = null;
+                audioFileInput.value = '';
+                fileInfo.style.display = 'none';
+                convertBtn.disabled = true;
+                convertBtn.classList.add('btn-disabled');
+                resultSection.style.display = 'none';
+                loadingIndicator.style.display = 'none';
+                resultText.textContent = '';
+                fileName.textContent = '';
+                fileSize.textContent = '';
+                statusMessage.style.display = 'none';
+            });
+            
+            copyBtn.addEventListener('click', function() {
+                if (!resultText.textContent) {
+                    showStatus('No text to copy. Please convert an audio file first.', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(resultText.textContent)
+                    .then(() => {
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyBtn.textContent = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        showStatus('Failed to copy text. Please try again.', 'error');
+                    });
+            });
+            
+            downloadBtn.addEventListener('click', function() {
+                if (!resultText.textContent) {
+                    showStatus('No text to download. Please convert an audio file first.', 'error');
+                    return;
+                }
+                
+                const blob = new Blob([resultText.textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transcription.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
