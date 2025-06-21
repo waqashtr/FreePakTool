@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio to Text Converter - Free Pak Tools</title>
+    <meta name="description" content="Convert your audio files to text quickly and accurately with our free online audio to text converter. Supports MP3, WAV, and other common formats.">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .tool-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Tool Section */
+        .tool-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--gray);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .upload-area p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .language-options {
+            margin-bottom: 1.5rem;
+        }
+        
+        .language-options label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .language-options select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .btn-disabled:hover {
+            background-color: var(--gray);
+            transform: none;
+        }
+        
+        /* Result Section */
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+        }
+        
+        .result-text {
+            border: 1px solid var(--gray);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* How to Use Section */
+        .how-to-use {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .how-to-use h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .how-to-use ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .how-to-use li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Ad Containers */
+        .ad-container {
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            border: 1px dashed var(--gray);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            color: var(--gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tool-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* File Info */
+        .file-info {
+            display: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Status Messages */
+        .status-message {
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .status-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .status-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">Free <span>Pak</span> Tools</a>
+            <a href="index.html" class="back-btn">← Back to Tools</a>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Top Ad -->
+        <div class="ad-container">
+            <div id="top-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/1007674305 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Top Ad: ca-app-pub-8894441711880316/1007674305");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+        
+        <!-- Tool Header -->
+        <section class="tool-header">
+            <h1>Audio to Text Converter</h1>
+            <p>Convert your audio files to text quickly and accurately. Supports MP3, WAV, and other common formats.</p>
+        </section>
+        
+        <!-- Tool Section -->
+        <section class="tool-section">
+            <div class="upload-area" id="uploadArea">
+                <i>🎤</i>
+                <h3>Upload Audio File</h3>
+                <p>Drag & drop your audio file here or click to browse</p>
+                <input type="file" id="audioFile" accept="audio/*" style="display: none;">
+                <button class="btn" id="browseBtn">Select File</button>
+            </div>
+            
+            <div id="fileInfo" style="display: none; margin-bottom: 1.5rem;">
+                <p><strong>Selected file:</strong> <span id="fileName"></span></p>
+                <p><strong>File size:</strong> <span id="fileSize"></span></p>
+            </div>
+            
+            <div class="language-options">
+                <label for="languageSelect">Select Language:</label>
+                <select id="languageSelect">
+                    <option value="en-US">English (United States)</option>
+                    <option value="en-GB">English (United Kingdom)</option>
+                    <option value="es-ES">Spanish (Spain)</option>
+                    <option value="fr-FR">French (France)</option>
+                    <option value="de-DE">German (Germany)</option>
+                    <option value="it-IT">Italian (Italy)</option>
+                    <option value="pt-BR">Portuguese (Brazil)</option>
+                    <option value="ru-RU">Russian (Russia)</option>
+                    <option value="hi-IN">Hindi (India)</option>
+                    <option value="ar-SA">Arabic (Saudi Arabia)</option>
+                    <option value="zh-CN">Chinese (China)</option>
+                    <option value="ja-JP">Japanese (Japan)</option>
+                    <option value="ko-KR">Korean (Korea)</option>
+                </select>
+            </div>
+            
+            <div class="status-message" id="statusMessage"></div>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Processing audio file. Please wait...</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-disabled" id="convertBtn" disabled>Convert to Text</button>
+                <button class="btn btn-outline" id="resetBtn">Reset</button>
+            </div>
+            
+            <div class="result-section" id="resultSection">
+                <h3>Converted Text:</h3>
+                <div class="result-text" id="resultText"></div>
+                <div class="action-buttons">
+                    <button class="btn" id="copyBtn">Copy Text</button>
+                    <button class="btn btn-outline" id="downloadBtn">Download as TXT</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How to Use Section -->
+        <section class="how-to-use">
+            <h2>How to Use the Audio to Text Converter</h2>
+            <ol>
+                <li><strong>Upload your audio file</strong> by clicking the "Select File" button or dragging and dropping your file into the upload area.</li>
+                <li><strong>Select language</strong> - choose the language spoken in your audio file.</li>
+                <li><strong>Convert to text</strong> - click the "Convert to Text" button to start transcription.</li>
+                <li><strong>Review the text</strong> - the converted text will appear in the results section.</li>
+                <li><strong>Copy or download</strong> - you can copy the text to your clipboard or download it as a text file.</li>
+            </ol>
+            <p>Note: For best results, use clear audio files without background noise. The accuracy depends on audio quality and speaker clarity.</p>
+        </section>
+        
+        <!-- Bottom Ad -->
+        <div class="ad-container">
+            <div id="bottom-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/7381510965 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Bottom Ad: ca-app-pub-8894441711880316/7381510965");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="copyright">© 2023 Free Pak Tools. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const audioFileInput = document.getElementById('audioFile');
+            const browseBtn = document.getElementById('browseBtn');
+            const convertBtn = document.getElementById('convertBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resultSection = document.getElementById('resultSection');
+            const resultText = document.getElementById('resultText');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const languageSelect = document.getElementById('languageSelect');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            let audioFile = null;
+            let audioContext = null;
+            let audioBuffer = null;
+            let audioSource = null;
+            let recognition = null;
+            
+            // Check if browser supports Web Speech API
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showStatus('Your browser does not support speech recognition. Please use Chrome or Edge for best results.', 'error');
+                convertBtn.disabled = true;
+            }
+            
+            // Handle file selection via button
+            browseBtn.addEventListener('click', function() {
+                audioFileInput.click();
+            });
+            
+            // Handle file selection via input
+            audioFileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+            
+            // Handle drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#4f46e5';
+                uploadArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.style.borderColor = '#94a3b8';
+                uploadArea.style.backgroundColor = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#94a3b8';
+                uploadArea.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFileSelection(e.dataTransfer.files[0]);
+                }
+            });
+            
+            // Handle file selection
+            function handleFileSelection(file) {
+                // Check if file is audio
+                if (!file.type.match('audio.*')) {
+                    showStatus('Please select an audio file (MP3, WAV, etc.)', 'error');
+                    return;
+                }
+                
+                audioFile = file;
+                
+                // Update UI
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'block';
+                
+                // Enable convert button
+                convertBtn.disabled = false;
+                convertBtn.classList.remove('btn-disabled');
+                
+                showStatus('File ready for conversion. Select language and click "Convert to Text".', 'success');
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Show status message
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message';
+                statusMessage.classList.add(`status-${type}`);
+                statusMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Convert button click
+            convertBtn.addEventListener('click', function() {
+                if (!audioFile) return;
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                convertBtn.disabled = true;
+                convertBtn.classList.add('btn-disabled');
+                resultText.textContent = '';
+                
+                // Get selected language
+                const language = languageSelect.value;
+                
+                // Initialize Web Audio API
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const fileReader = new FileReader();
+                
+                fileReader.onload = function(e) {
+                    audioContext.decodeAudioData(e.target.result)
+                        .then(function(buffer) {
+                            audioBuffer = buffer;
+                            startRecognition(language);
+                        })
+                        .catch(function(error) {
+                            loadingIndicator.style.display = 'none';
+                            showStatus('Error processing audio file: ' + error.message, 'error');
+                            convertBtn.disabled = false;
+                            convertBtn.classList.remove('btn-disabled');
+                        });
+                };
+                
+                fileReader.onerror = function() {
+                    loadingIndicator.style.display = 'none';
+                    showStatus('Error reading audio file', 'error');
+                    convertBtn.disabled = false;
+                    convertBtn.classList.remove('btn-disabled');
+                };
+                
+                fileReader.readAsArrayBuffer(audioFile);
+            });
+            
+            // Start speech recognition
+            function startRecognition(language) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.continuous = true;
+                recognition.interimResults = false;
+                recognition.lang = language;
+                
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript + ' ';
+                        }
+                    }
+                    
+                    resultText.textContent += finalTranscript;
+                };
+                
+                recognition.onerror = function(event) {
+                    loadingIndicator.style.display = 'none';
+                    showStatus('Recognition error: ' + event.error, 'error');
+                    convertBtn.disabled = false;
+                    convertBtn.classList.remove('btn-disabled');
+                };
+                
+                recognition.onend = function() {
+                    loadingIndicator.style.display = 'none';
+                    resultSection.style.display = 'block';
+                    showStatus('Conversion complete!', 'success');
+                };
+                
+                // Play audio and start recognition
+                audioSource = audioContext.createBufferSource();
+                audioSource.buffer = audioBuffer;
+                audioSource.connect(audioContext.destination);
+                
+                // Start recognition first
+                recognition.start();
+                
+                // Add slight delay before playing audio to ensure recognition is ready
+                setTimeout(function() {
+                    audioSource.start(0);
+                }, 300);
+            }
+            
+            // Reset button click
+            resetBtn.addEventListener('click', function() {
+                // Stop any ongoing recognition
+                if (recognition) {
+                    recognition.stop();
+                }
+                
+                // Stop any playing audio
+                if (audioSource) {
+                    audioSource.stop();
+                }
+                
+                // Reset variables
+                audioFile = null;
+                audioBuffer = null;
+                recognition = null;
+                
+                // Reset UI
+                audioFileInput.value = '';
+                fileInfo.style.display = 'none';
+                convertBtn.disabled = true;
+                convertBtn.classList.add('btn-disabled');
+                resultSection.style.display = 'none';
+                loadingIndicator.style.display = 'none';
+                resultText.textContent = '';
+                fileName.textContent = '';
+                fileSize.textContent = '';
+                statusMessage.style.display = 'none';
+            });
+            
+            // Copy button click
+            copyBtn.addEventListener('click', function() {
+                if (!resultText.textContent) {
+                    showStatus('No text to copy. Please convert an audio file first.', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(resultText.textContent)
+                    .then(() => {
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyBtn.textContent = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        showStatus('Failed to copy text. Please try again.', 'error');
+                    });
+            });
+            
+            // Download button click
+            downloadBtn.addEventListener('click', function() {
+                if (!resultText.textContent) {
+                    showStatus('No text to download. Please convert an audio file first.', 'error');
+                    return;
+                }
+                
+                const blob = new Blob([resultText.textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transcription.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
