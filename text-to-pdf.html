@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to PDF Generator - Free Pak Tools</title>
+    <meta name="description" content="Convert any text to a downloadable PDF file with our free online Text to PDF Generator. Customize formatting and download instantly.">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .tool-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Tool Section */
+        .tool-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .text-input {
+            width: 100%;
+            min-height: 300px;
+            padding: 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            resize: vertical;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .option-group label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .option-group select,
+        .option-group input {
+            padding: 0.5rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Preview Section */
+        .preview-section {
+            display: none;
+            margin-top: 2rem;
+        }
+        
+        .preview-container {
+            border: 1px solid var(--gray);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            background-color: white;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* How to Use Section */
+        .how-to-use {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .how-to-use h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .how-to-use ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .how-to-use li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Ad Containers */
+        .ad-container {
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            border: 1px dashed var(--gray);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            color: var(--gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tool-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">Free <span>Pak</span> Tools</a>
+            <a href="index.html" class="back-btn">← Back to Tools</a>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Top Ad -->
+        <div class="ad-container">
+            <div id="top-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/1130144998 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Top Ad: ca-app-pub-8894441711880316/1130144998");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+        
+        <!-- Tool Header -->
+        <section class="tool-header">
+            <h1>Text to PDF Generator</h1>
+            <p>Convert any text to a downloadable PDF file with customizable formatting options.</p>
+        </section>
+        
+        <!-- Tool Section -->
+        <section class="tool-section">
+            <textarea class="text-input" id="textInput" placeholder="Enter your text here..."></textarea>
+            
+            <h3>PDF Options</h3>
+            <div class="options-grid">
+                <div class="option-group">
+                    <label for="pageSize">Page Size</label>
+                    <select id="pageSize">
+                        <option value="a4">A4</option>
+                        <option value="letter">Letter</option>
+                        <option value="legal">Legal</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="orientation">Orientation</label>
+                    <select id="orientation">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="fontSize">Font Size</label>
+                    <select id="fontSize">
+                        <option value="10">10pt</option>
+                        <option value="12" selected>12pt</option>
+                        <option value="14">14pt</option>
+                        <option value="16">16pt</option>
+                        <option value="18">18pt</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="margin">Margin (mm)</label>
+                    <input type="number" id="margin" value="20" min="10" max="50">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn" id="generateBtn">Generate PDF</button>
+                <button class="btn btn-outline" id="previewBtn">Preview</button>
+                <button class="btn btn-outline" id="resetBtn">Reset</button>
+            </div>
+            
+            <div class="preview-section" id="previewSection">
+                <h3>PDF Preview:</h3>
+                <div class="preview-container" id="previewContainer"></div>
+                <div class="action-buttons">
+                    <button class="btn" id="downloadBtn">Download PDF</button>
+                    <button class="btn btn-outline" id="closePreviewBtn">Close Preview</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How to Use Section -->
+        <section class="how-to-use">
+            <h2>How to Use the Text to PDF Generator</h2>
+            <ol>
+                <li><strong>Enter your text</strong> in the text area above. You can paste text from any source.</li>
+                <li><strong>Customize the PDF settings</strong> - choose page size, orientation, font size, and margins.</li>
+                <li><strong>Generate your PDF</strong> - click the "Generate PDF" button to create your document.</li>
+                <li><strong>Preview or download</strong> - you can preview the PDF before downloading or download it directly.</li>
+            </ol>
+            <p>Note: The PDF will preserve your text formatting including line breaks and paragraphs. For advanced formatting, consider using a word processor before converting to PDF.</p>
+        </section>
+        
+        <!-- Bottom Ad -->
+        <div class="ad-container">
+            <div id="bottom-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/2129184288 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Bottom Ad: ca-app-pub-8894441711880316/2129184288");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="copyright">© 2023 Free Pak Tools. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            
+            // DOM Elements
+            const textInput = document.getElementById('textInput');
+            const pageSize = document.getElementById('pageSize');
+            const orientation = document.getElementById('orientation');
+            const fontSize = document.getElementById('fontSize');
+            const margin = document.getElementById('margin');
+            const generateBtn = document.getElementById('generateBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const closePreviewBtn = document.getElementById('closePreviewBtn');
+            const previewSection = document.getElementById('previewSection');
+            const previewContainer = document.getElementById('previewContainer');
+            
+            let pdfDoc = null;
+            
+            // Generate PDF
+            function generatePDF(preview = false) {
+                const text = textInput.value.trim();
+                
+                if (!text) {
+                    alert('Please enter some text to convert to PDF');
+                    return;
+                }
+                
+                // Create new PDF document
+                const doc = new jsPDF({
+                    orientation: orientation.value,
+                    unit: 'mm',
+                    format: pageSize.value
+                });
+                
+                // Set font
+                doc.setFont('helvetica');
+                doc.setFontSize(parseInt(fontSize.value));
+                
+                // Calculate available width
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const marginValue = parseInt(margin.value);
+                const availableWidth = pageWidth - (marginValue * 2);
+                
+                // Split text into lines
+                const lines = doc.splitTextToSize(text, availableWidth);
+                
+                // Add text to PDF
+                let y = marginValue;
+                const lineHeight = parseInt(fontSize.value) * 0.3528 * 1.2; // Convert pt to mm and add spacing
+                
+                lines.forEach(line => {
+                    // Check if we need a new page
+                    if (y > doc.internal.pageSize.getHeight() - marginValue) {
+                        doc.addPage();
+                        y = marginValue;
+                    }
+                    
+                    doc.text(line, marginValue, y);
+                    y += lineHeight;
+                });
+                
+                if (preview) {
+                    // For preview, we'll just show the text (actual PDF preview would require more complex solution)
+                    previewContainer.innerHTML = text.replace(/\n/g, '<br>');
+                    previewSection.style.display = 'block';
+                    pdfDoc = doc;
+                } else {
+                    // Download the PDF
+                    doc.save('document.pdf');
+                }
+            }
+            
+            // Event Listeners
+            generateBtn.addEventListener('click', function() {
+                generatePDF(false);
+            });
+            
+            previewBtn.addEventListener('click', function() {
+                generatePDF(true);
+            });
+            
+            downloadBtn.addEventListener('click', function() {
+                if (pdfDoc) {
+                    pdfDoc.save('document.pdf');
+                }
+            });
+            
+            closePreviewBtn.addEventListener('click', function() {
+                previewSection.style.display = 'none';
+            });
+            
+            resetBtn.addEventListener('click', function() {
+                textInput.value = '';
+                pageSize.value = 'a4';
+                orientation.value = 'portrait';
+                fontSize.value = '12';
+                margin.value = '20';
+                previewSection.style.display = 'none';
+                pdfDoc = null;
+            });
+        });
+    </script>
+</body>
+</html>
