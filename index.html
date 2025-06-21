@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Pak Tools - Online Utility Tools for Everyone</title>
+    <meta name="description" content="Free online tools for audio to text conversion, PDF generation, video to MP3 conversion, stylish text generation, case conversion, and image compression. All tools are free to use with no registration required.">
+    <meta name="keywords" content="audio to text converter, text to PDF online, image compressor tool, stylish text, video to MP3 converter, text case converter, free online tools, Pakistan tools">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s linear;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .tool-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+        }
+        
+        .tool-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .tool-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* SEO Content */
+        .seo-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .seo-content h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .seo-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Feedback Form */
+        .feedback {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feedback h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            color: var(--gray);
+        }
+        
+        /* Ad Containers */
+        .ad-container {
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            border: 1px dashed var(--gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">Free <span>Pak</span> Tools</a>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Top Ad -->
+        <div class="ad-container">
+            <div id="top-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/8981533090 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Top Ad: ca-app-pub-8894441711880316/8981533090");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Free Online Tools for Everyday Tasks</h1>
+            <p>Convert audio to text, generate PDFs, compress images, and more with our free online tools. No registration required.</p>
+        </section>
+        
+        <!-- Tools Grid -->
+        <section class="tools-grid">
+            <!-- Audio to Text Converter -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>🎤</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Audio to Text Converter</h3>
+                    <p>Convert your audio files to text quickly and accurately. Supports MP3, WAV, and other common formats.</p>
+                    <a href="audio-to-text.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+            
+            <!-- Text to PDF Generator -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>📄</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Text to PDF Generator</h3>
+                    <p>Convert any text to a downloadable PDF file with customizable formatting options.</p>
+                    <a href="text-to-pdf.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+            
+            <!-- Video to MP3 Converter -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>🎬</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Video to MP3 Converter</h3>
+                    <p>Extract audio from video files and save as MP3. Works with MP4, AVI, MOV and more.</p>
+                    <a href="video-to-mp3.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+            
+            <!-- Stylish Text Generator -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>✍️</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Stylish Text Generator</h3>
+                    <p>Create fancy text for social media with our stylish font generator. Copy with one click.</p>
+                    <a href="stylish-text.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+            
+            <!-- Text Case Converter -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>🔠</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Text Case Converter</h3>
+                    <p>Convert text between uppercase, lowercase, sentence case, title case and more.</p>
+                    <a href="text-case.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+            
+            <!-- Image Compressor -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i>🖼️</i>
+                </div>
+                <div class="tool-content">
+                    <h3>Image Compressor</h3>
+                    <p>Reduce image file size without losing quality. Supports JPG, PNG, and WebP formats.</p>
+                    <a href="image-compressor.html" class="btn">Use Tool</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEO Content -->
+        <section class="seo-content">
+            <h2>Free Online Tools for All Your Needs</h2>
+            <p>Welcome to Free Pak Tools, your one-stop destination for free online utilities that make your digital life easier. Our collection of tools is designed to help you with common tasks without requiring any software installation or registration. Whether you're a student, professional, or just someone who needs quick solutions, our tools are here to help.</p>
+            
+            <p>Our <strong>audio to text converter</strong> is perfect for transcribing interviews, lectures, or meetings. Simply upload your audio file and get accurate text in seconds. This tool supports various formats including MP3, WAV, and OGG, making it versatile for all your transcription needs.</p>
+            
+            <p>Need to create professional documents? Our <strong>text to PDF online converter</strong> lets you transform any text into a polished PDF document. You can adjust formatting, add headers and footers, and download your file ready for printing or sharing.</p>
+            
+            <p>For content creators, our <strong>video to MP3 converter</strong> extracts high-quality audio from your video files. This is ideal for creating podcasts from videos or saving your favorite music from video clips. The process is fast and preserves audio quality.</p>
+            
+            <p>Make your social media posts stand out with our <strong>stylish text generator</strong>. Create eye-catching text with different fonts and styles that work on Instagram, Facebook, Twitter and other platforms. Copy with one click and paste directly into your posts.</p>
+            
+            <p>Our <strong>text case converter</strong> helps you format text exactly how you need it. Convert between uppercase, lowercase, sentence case, title case, and more with just a few clicks. This is especially useful for editing documents or preparing content for publication.</p>
+            
+            <p>Optimize your website or save storage space with our <strong>image compressor tool</strong>. Reduce file sizes of JPG, PNG, and WebP images without noticeable quality loss. This tool is perfect for webmasters, bloggers, and anyone who needs to send images via email or messaging apps.</p>
+            
+            <p>All our tools are completely free to use with no hidden charges. We prioritize your privacy - your files are processed in your browser and never uploaded to our servers unless you choose to save them. The interface is clean, intuitive, and works on all devices from smartphones to desktop computers.</p>
+            
+            <p>Free Pak Tools is constantly evolving. We're working on adding more useful tools based on user feedback. If you have suggestions for tools you'd like to see, please let us know through our feedback form. Our goal is to provide the most useful collection of free online tools for users in Pakistan and around the world.</p>
+        </section>
+        
+        <!-- Bottom Ad -->
+        <div class="ad-container">
+            <div id="bottom-ad">
+                <!-- AdMob Ad Unit: ca-app-pub-8894441711880316/6355369753 -->
+                <script>
+                    // AdMob ad code would go here
+                    console.log("AdMob Bottom Ad: ca-app-pub-8894441711880316/6355369753");
+                </script>
+                <p>Advertisement</p>
+            </div>
+        </div>
+        
+        <!-- Feedback Form -->
+        <section class="feedback">
+            <h2>Send Us Your Feedback</h2>
+            <form class="feedback-form" id="feedbackForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email (optional)</label>
+                    <input type="email" id="email" placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" placeholder="Your feedback or suggestions" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Feedback</button>
+            </form>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="copyright">© 2023 Free Pak Tools. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Animated Background
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const colors = ['rgba(79, 70, 229, 0.1)', 'rgba(16, 185, 129, 0.1)', 'rgba(99, 102, 241, 0.1)'];
+            
+            for (let i = 0; i < 50; i++) {
+                const span = document.createElement('span');
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.top = Math.random() * 100 + 'vh';
+                span.style.width = Math.random() * 10 + 10 + 'px';
+                span.style.height = span.style.width;
+                span.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                span.style.opacity = Math.random() * 0.5 + 0.1;
+                bgAnimation.appendChild(span);
+            }
+            
+            document.addEventListener('mousemove', function(e) {
+                const x = e.clientX;
+                const y = e.clientY;
+                
+                const spans = document.querySelectorAll('.bg-animation span');
+                spans.forEach(span => {
+                    const dx = (parseFloat(span.style.left) - x;
+                    const dy = (parseFloat(span.style.top) - y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 200) {
+                        span.style.transform = `translate(${parseFloat(span.style.left) - dx * 0.1}px, ${parseFloat(span.style.top) - dy * 0.1}px)`;
+                    }
+                });
+            });
+            
+            // Feedback Form Handling
+            const feedbackForm = document.getElementById('feedbackForm');
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const message = document.getElementById('message').value;
+                
+                // In a real implementation, you would send this data to a server
+                console.log('Feedback submitted:', { name, message });
+                
+                alert('Thank you for your feedback!');
+                feedbackForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
